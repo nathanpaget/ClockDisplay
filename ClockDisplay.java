@@ -17,15 +17,18 @@ public class ClockDisplay
     private NumberDisplay hours;
     private NumberDisplay minutes;
     private String displayString;    // simulates the actual display
-    
+    private String[] dayNightArray = {"AM", "PM"};
+    private int dayNightVal;
+    private String hourRep;
     /**
      * Constructor for ClockDisplay objects. This constructor 
      * creates a new clock set at 00:00.
      */
     public ClockDisplay()
     {
-        hours = new NumberDisplay(24);
+        hours = new NumberDisplay(12);
         minutes = new NumberDisplay(60);
+        dayNightVal=0;
         updateDisplay();
     }
 
@@ -36,8 +39,9 @@ public class ClockDisplay
      */
     public ClockDisplay(int hour, int minute)
     {
-        hours = new NumberDisplay(24);
+        hours = new NumberDisplay(12);
         minutes = new NumberDisplay(60);
+        dayNightVal=0;
         setTime(hour, minute);
     }
 
@@ -50,6 +54,9 @@ public class ClockDisplay
         minutes.increment();
         if(minutes.getValue() == 0) {  // it just rolled over!
             hours.increment();
+        }
+        if(hours.getValue() == 0 && minutes.getValue()==0) {  // it just rolled over!
+            dayNightVal=dayNightVal+1;
         }
         updateDisplay();
     }
@@ -78,7 +85,16 @@ public class ClockDisplay
      */
     private void updateDisplay()
     {
-        displayString = hours.getDisplayValue() + ":" + 
-                        minutes.getDisplayValue();
+        if (hours.getValue()==0)
+        {
+            hourRep="12";
+        }
+        else
+        {
+            hourRep=hours.getDisplayValue();
+        }
+        displayString = hourRep + ":" + 
+                        minutes.getDisplayValue() + " " + 
+                        dayNightArray[dayNightVal%2];
     }
 }
